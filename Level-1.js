@@ -104,11 +104,11 @@ function init(mapText) {
   const inputMap = readMap(mapText);
 
   // 1
-  // console.log(inputMap);
+  console.log(inputMap);
   // 2
-  // console.log(setNumberArray(inputMap));
+  console.log(setNumberArray(inputMap));
   // 3
-  console.log(printStageInfo(inputMap));
+  // console.log(printStageInfo(inputMap));
 }
 
 init("testMap.txt");

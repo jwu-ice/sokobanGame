@@ -17,6 +17,7 @@ function moveController(command) {
   const [y, x] = getPlayerPos(stageInfo.currStageArr);
   const [mY, mX] = [...movePos(command, y, x)]; // 갈 좌표에 누가있니?
   let [behindY, behindX] = [0, 0];
+
   if (stageInfo.currStageArr[mY][mX] !== "#") {
     [behindY, behindX] = [...movePos(command, mY, mX)]; // 가고나서 뒤의 좌표에 누가있니?
   }
