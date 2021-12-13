@@ -160,6 +160,7 @@ function readStageFile(mapText) {
 // ------------------ 세이브 & 로드 함수 --------------------
 
 function saveCurrentArray(line) {
+  console.log(`${line[0]}번에 저장되었습니다.`);
   const saveObj = loadDataFile(stageInfo.saveTextUrl);
   const levelObj = { stageLevel: stageInfo.stageLevel };
 
@@ -169,6 +170,7 @@ function saveCurrentArray(line) {
 }
 
 function loadSaveArray(line) {
+  console.log(`${line[0]}번을 불러옵니다.`);
   const saveObj = loadDataFile(stageInfo.saveTextUrl);
   const saveNum = `${line[0]}번`;
   if (!saveObj[saveNum]) {
@@ -190,6 +192,7 @@ function loadDataFile(dataStr) {
 }
 
 function printSaveList() {
+  console.log(`저장된 리스트를 불러옵니다.`);
   const saveObj = loadDataFile(stageInfo.saveTextUrl);
   for (let key in saveObj) {
     console.log(`\n${key}\n`);
@@ -209,49 +212,65 @@ const rl = readline.createInterface({
 rl.prompt();
 rl.on("line", (someLine) => {
   const line = someLine.toUpperCase();
-  if (/^Q$/.test(line)) {
-    console.log("Bye~");
-    rl.close();
-  }
-  if (/^[WASD]$/.test(line)) {
-    moveController(line);
-  } else if (/^\?$/.test(line)) {
-    console.log(`
-                                Stage:     ${stageInfo.stageLevel}
-                                TurnCount: ${stageInfo.turnCount}
-                ↑
-                W               Q:      Exit
-            ← A   D →           R:      Refresh
-                S               [1-5]S: Save 
-                ↓               [1-5]L: Load
-                                L:      Saved List
 
-    -   Only one letter allow   -
-    -   Does not matter uppercase or lowercase   -
+  switch (true) {
+    case /^Q$/.test(line):
+      console.log("Bye~");
+      rl.close();
+      break;
 
-      `);
-    printMap(stageInfo.currStageArr);
-  } else if (/^R$/.test(line)) {
-    console.log(`\n--- Stage Reset ---`);
-    resetStage(stageInfo.stageLevel);
-  } else if (/^[1-5]S$/.test(line)) {
-    console.log(`${line[0]}번에 저장되었습니다.`);
-    saveCurrentArray(line);
-  } else if (/^[1-5]L$/.test(line)) {
-    console.log(`${line[0]}번을 불러옵니다.`);
-    loadSaveArray(line);
-  } else if (/^L$/.test(line)) {
-    console.log(`저장된 리스트를 불러옵니다.`);
-    printSaveList();
-  } else if (/^u$/.test(someLine)) {
-    // 한턴 되돌리기
-    // revertTurn();
-  } else if (/^U$/.test(line)) {
-    // 되돌리기 취소
-    // cancelRevertTurn();
-  } else {
-    console.log(`\nTry again! Only one letter \n*hint: ?`);
-    printMap(stageInfo.currStageArr);
+    case /^[WASD]$/.test(line):
+      moveController(line);
+      break;
+
+    case /^\?$/.test(line):
+      console.log(`
+                        Stage:     ${stageInfo.stageLevel}
+                        TurnCount: ${stageInfo.turnCount}
+        ↑
+        W               Q:      Exit
+    ← A   D →           R:      Refresh
+        S               [1-5]S: Save
+        ↓               [1-5]L: Load
+                        L:      Saved List
+
+-   Only one letter allow   -
+-   Does not matter uppercase or lowercase   -
+
+`);
+      printMap(stageInfo.currStageArr);
+      break;
+
+    case /^R$/.test(line):
+      console.log(`\n--- Stage Reset ---`);
+      resetStage(stageInfo.stageLevel);
+      break;
+
+    case /^[1-5]S$/.test(line):
+      saveCurrentArray(line);
+      break;
+
+    case /^[1-5]L$/.test(line):
+      loadSaveArray(line);
+      break;
+
+    case /^L$/.test(line):
+      printSaveList();
+      break;
+
+    case /^u$/.test(someLine):
+      // 한턴 되돌리기
+      // revertTurn();
+      break;
+
+    case /^U$/.test(line):
+      // 되돌리기 취소
+      // cancelRevertTurn();
+      break;
+
+    default:
+      console.log(`\nTry again! Only one letter \n*hint: ?`);
+      printMap(stageInfo.currStageArr);
   }
   rl.prompt();
 }).on("close", function () {
